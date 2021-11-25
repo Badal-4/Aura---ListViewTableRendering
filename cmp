@@ -1,0 +1,118 @@
+<aura:component extends="c:CustomerCommunity_BaseTable" controller="CustomerCommunity_SFContactController">
+    
+    <aura:attribute name="AccountInfo" type="Object" />
+    <aura:attribute name="userPackage" type="String"/>
+    <aura:attribute name="selectedFields" type="List" />
+    <aura:attribute name="tableHeaderVisibilty" type="Map"/>
+    <aura:attribute name="accountList" type="List" default="[]" />
+    <aura:attribute name="tableHeaders" type="List" default="['Institution','City','Country']" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:CustomerCommunity_ListViewColumnEvent" action="{!c.handleVisibility}"/>
+    
+    <aura:set attribute="itemBody">
+        <aura:if isTrue="{!v.loadDataTable}">
+            <div style="overflow:auto">
+                <table id="internalaccountlist" style="table-layout:fixed;width:101% !important"
+                    class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th style="display: none;" >
+                                Id
+                            </th>
+                            <aura:iteration items="{!v.selectedFields}" var="header">
+                                <th class="resizable slds-is-resizable" scope="col">
+                                    {!header}
+                                    <div class="slds-resizable">
+                                        <input class="slds-resizable__input slds-assistive-text" type="range" min="20"
+                                            max="1000" id="cell-resize-handle-602" tabindex="0" />
+                                        <span class="slds-resizable__handle">
+                                            <span class="slds-resizable__divider"></span>
+                                        </span>
+                                    </div>
+                                </th>
+                            </aura:iteration>
+                        </tr>
+                    </thead>
+                    <tfoot style="display:table-header-group">
+                        <tr>
+                            <th style="display: none;" >
+                                Id
+                            </th>
+                            <aura:iteration items="{!v.selectedFields}" var="header">
+                                <th>{!header}</th>
+                            </aura:iteration>
+                        </tr>
+                    </tfoot>
+                    <aura:if isTrue="{!not(empty(v.accountList))}">
+                        <tbody>
+                            <aura:iteration items="{!v.accountList }" var="acc" indexVar="itemIndex">
+                                <tr class="slds-line-height_reset">
+                                    <td style="display: none;" title="{!acc.Id}">
+                                        {!acc.Id}
+                                    </td>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.P_of_Shares_Outstanding == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.city}">
+                                            {!acc.Name}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.AuM_USD == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.city}">
+                                            {!acc.Name}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.City == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.city}">
+                                            {!acc.city}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.Country == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.country}">
+                                            {!acc.country}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.Created_On == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.createdDate}">
+                                            {!acc.createdDate}
+                                        </td>
+                                    </aura:if>
+                                   <aura:if isTrue="{!v.tableHeaderVisibilty.Institution == true}">
+                                        <td class="greenfont resizable slds-border--top" style="cursor:pointer"
+                                            title="{!acc.Name}" onclick="{!c.showDetails}" data-id="{!acc.Id}">
+                                            {!acc.Name}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.Last_Meeting == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.Name}">
+                                            {!acc.Name}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.Postal_Code == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.postal}">
+                                            {!acc.postal}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.Shares_Held == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.Name}">
+                                            {!acc.Name}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.Style == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.Name}">
+                                            {!acc.Name}
+                                        </td>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.tableHeaderVisibilty.Turnover_Label == true}">
+                                        <td class="resizable slds-border--top" title="{!acc.Name}">
+                                            {!acc.Name}
+                                        </td>
+                                    </aura:if>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </aura:if>
+                </table>
+            </div>
+        </aura:if>
+    </aura:set>
+</aura:component>
