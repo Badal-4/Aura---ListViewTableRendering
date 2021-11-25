@@ -1,0 +1,50 @@
+({
+    getSalesforceAccounts : function(component, event, helper) {
+        component.set("v.showSpinner", true);
+        var action = component.get("c.getAccounts");
+        action.setCallback(this, function (response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                const responseData = JSON.parse(JSON.stringify(response.getReturnValue()));
+                console.log('responseData :: ',responseData);
+                component.set("v.accountList", responseData.accountList);
+                component.set("v.selectedFields", responseData.accountFieldToDisplay.sort());
+                helper.handleColumnVisibility(component, event, helper);
+                helper.formatDatatable(component, event, helper);
+            } else {
+                component.set("v.showSpinner", false);
+                helper.showToast("Error Retreiving Details","Error","error");
+            }
+        });
+        $A.enqueueAction(action);
+    },
+
+    handleColumnVisibility : function(component, event, helper) {
+        var arr = {}; 
+        arr['P_of_Shares_Outstanding'] = false;
+        arr['AuM_USD'] = false;
+        arr['City'] = false;
+        arr['Country'] = false;
+        arr['Created_On'] = false;
+        arr['Institution'] = false;
+        arr['Last_Meeting'] = false;
+        arr['Postal_Code'] = false;
+        arr['Shares_Held'] = false;
+        arr['Style'] = false;
+        arr['Turnover_Label'] = false;
+        
+        var selectedfields = component.get("v.selectedFields");
+        for(var index=0; index<selectedfields.length; index++) {
+            var selectedField = selectedfields[index].indexOf(' ') != -1 ? selectedfields[index].replaceAll(" ", "_")
+                                    :selectedfields[index];
+            selectedField = selectedField.replaceAll('%', "P");
+            selectedField = selectedField.replaceAll(/[^a-zA-Z0-9_]/g, "");
+            if(selectedField in arr ) {
+                arr[selectedField] = true;
+            } 
+        }
+        console.log('arr :: ',arr);
+        component.set("v.tableHeaderVisibilty", arr);
+        component.set("v.selectedFields", selectedfields);
+    }
+})
