@@ -1,0 +1,32 @@
+({
+    doInit : function(component, event, helper) {
+        component.set("v.tabelId",'internalaccountlist');
+        component.set("v.defaultSort",0);
+        //component.set("v.backButtonTitle","Back to Institutions");
+        helper.getSalesforceAccounts(component, event, helper);
+    },
+
+    showDetails : function(component, event, helper) {
+        const recordId = event.target.dataset.id;
+        let url;
+        if(recordId) {
+            //const objName = recordId.startsWith('003') ? 'contact' : 'account';
+            //url = window.location.origin + '/community/s/'+objName+'/'+recordId;
+            window.parent.postMessage('navigateAccount'+';'+recordId +';'+ ''+';'+ '');
+        }
+        // open the tab in new window
+        //component.set("v.detailURL",url);
+        //component.set("v.showDetail",true);  
+    },
+    handleVisibility : function(component, event, helper) {
+        component.set("v.selectedFields", event.getParam("selectedFields"));
+        //$('table#internalcontactlist').destroy();
+        helper.handleColumnVisibility(component, event, helper);
+        helper.formatDatatable(component, event, helper);
+    },
+    handleExitDetail : function(component, event, helper) {
+        component.set("v.showDetail",false);
+        component.set("v.showSpinner", true);
+        helper.formatDatatable(component, event, helper);
+    }
+})
